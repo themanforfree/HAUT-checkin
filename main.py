@@ -5,17 +5,19 @@ import re
 import random
 from login import CampusCard
 
-
+# error数组用于保存打卡失败的成员循环打卡
 error = []
 
 
 def main():
 
+    # 输入数据
     stus = []
     tmp = input()
     while tmp != 'end':
         stus.append(tmp.split(' '))
         tmp = input()
+
 
     for stu in stus:
         phone = stu[0]
@@ -106,6 +108,7 @@ def get_last_post_json(token):
     return None
 
 
+# 从上次打卡的信息中获取对应的数据
 def get_updatainfo(updatainfos, propertyname):
     for a in updatainfos:
         if a['propertyname'] == propertyname:
