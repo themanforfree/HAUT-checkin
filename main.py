@@ -6,7 +6,6 @@ import random
 from login import CampusCard
 
 
-
 error = []
 
 
@@ -261,7 +260,7 @@ def check(phone, password, uid):
     for i in range(1, 2):
         print('{0}第{1}次尝试打卡中...'.format(last_check_json['username'], i))
         response = requests.post(
-            "https://reportedh5.17wanxiao.com/sass/api/epmpics",json=check_json)
+            "https://reportedh5.17wanxiao.com/sass/api/epmpics", json=check_json)
         if response.status_code == 200:
             flag = 1
             break

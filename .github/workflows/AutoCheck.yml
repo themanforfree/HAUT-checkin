@@ -4,10 +4,8 @@
 name: AutoCheck
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch:
+  
   schedule:
      - cron: 0 1 * * *
 jobs:
