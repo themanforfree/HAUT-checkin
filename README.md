@@ -36,7 +36,7 @@
 
 接下来你需要设置`Secert`添加打卡成员的信息，在你Fork的项目中按以下步骤操作
  
-Settings`->`Secert`->`New repository secert`
+`Settings`->`Secert`->`New repository secert`
 
 ![](img/4.png)
 
@@ -72,7 +72,7 @@ end
 
 然后按以下操作启用github actions
 
-Fork的项目主页->Action->I understand... 开启Actions
+`Fork的项目主页`->`Actions`->`I understand...` 开启Actions
 
 ![](img/6.png)
 
@@ -84,7 +84,7 @@ Fork的项目主页->Action->I understand... 开启Actions
 
 ![](img/8.png)
 
-**默认每日7:00开始打卡,由于Github Actions的延迟，可能会推迟自动打卡时间**
+**由于github actions存在明显延迟，默认设置于每日每日凌晨00:00打卡**
 
 **注意：本项目默认学校为河南工业大学，其他学校请自行修改代码。**
 
