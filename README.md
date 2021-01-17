@@ -1,5 +1,5 @@
 # HAUT-checkin
-河南工业大学自动校外打卡，基于github Actions免服务器运行
+河南工业大学自动校外打卡，基于Github Actions免服务器运行
 
 - 多人打卡
 - 使用简单，仅需账号密码以及用于微信推送的uid
@@ -8,6 +8,8 @@
 - 完美校园服务器繁忙时造成打卡失败会自动重新打卡，直到所有成员成功打卡
 
 ## 更新日志
+
+2021.1.17 Github Action出现未知问题无法使用，请使用[腾讯云函数版本](https://github.com/themanforfree/HAUT-checkin-SCF)
 
 2021.1.10 添加手动运行按钮，重写使用方法，添加截图便于操作
 
