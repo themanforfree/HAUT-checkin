@@ -3,7 +3,8 @@ import json
 import time
 import re
 import random
-from login import CampusCard
+import os
+from campus import CampusCard
 
 # error数组用于保存打卡失败的成员循环打卡
 error = []
@@ -18,25 +19,25 @@ def main():
         stus.append(tmp.split(' '))
         tmp = input()
 
-
     for stu in stus:
         phone = stu[0]
         password = stu[1]
-        uid = stu[2]
-        msg = check(phone, password, uid)
+        device_seed = stu[2]
+        uid = stu[3]
+        msg = check(phone, password, device_seed, uid)
         print(msg)
         wechat_push(uid, msg)
 
     # 当error list不为空时一直循环打卡 直到清空error
     while len(error) != 0:
-        # 等待5min
-        time.sleep(300)
+        # 等待1min
+        time.sleep(60)
         for i in range(len(error)-1, -1, -1):
             phone = error[i][0]
             password = error[i][1]
             uid = error[i][2]
 
-            msg = check(phone, password, uid)
+            msg = check(phone, password, device_seed, uid)
             print(msg)
             wechat_push(uid, msg)
             # 打卡成功后从error中删除对应成员
@@ -70,8 +71,8 @@ def wechat_push(uid, msg):
         print('微信推送失败!')
 
 
-def get_token(phone, password):
-    stuobj = CampusCard(phone, password).user_info
+def get_token(phone, password, device_seed):
+    stuobj = CampusCard(phone, password, device_seed).user_info
     if stuobj['login']:
         return stuobj["sessionId"]
     return None
@@ -116,8 +117,8 @@ def get_updatainfo(updatainfos, propertyname):
     return None
 
 
-def check(phone, password, uid):
-    token = get_token(phone, password)
+def check(phone, password, device_seed, uid):
+    token = get_token(phone, password, device_seed)
     if not token:
         return '获取token失败'
     last_check_json = get_last_post_json(token)
@@ -226,8 +227,7 @@ def check(phone, password, uid):
                 },
                 {
                     "propertyname": "FamilyIsolate",
-                    "value": ""
-                },
+                    "value": ""},
                 {
                     "propertyname": "ishborwh",
                     "value": "否"
@@ -268,6 +268,7 @@ def check(phone, password, uid):
             flag = 1
             break
         else:
+            print(response.text)
             print('{0}第{1}次打卡失败!30s后重新打卡'.format(
                 last_check_json['username'], i))
             time.sleep(30)
@@ -279,9 +280,13 @@ def check(phone, password, uid):
         else:
             msg = time_msg + '时' + last_check_json['username'] + "打卡异常"
     else:
-        msg = time_msg + "网络错误打卡失败!5min后重新打卡!"
-        error.append([phone, password, uid])
+        msg = time_msg + "网络错误打卡失败!1min后重新打卡!"
+        error.append([phone, password, device_seed, uid])
     return msg
+
+
+def main_handler(arg1, arg2):
+    main()
 
 
 if __name__ == "__main__":
