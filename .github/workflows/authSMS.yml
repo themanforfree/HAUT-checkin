@@ -1,4 +1,4 @@
-name: "sendSMS"
+name: "authSMS"
 
 on:
   workflow_dispatch:
@@ -16,9 +16,9 @@ jobs:
       run: |
         pip3 install requests pycryptodome
 
-    - name: send SMS
+    - name: auth SMS
       run: |
-          python3 SMS.py send
+          python3 SMS.py ${{ secrets.SMS }}
       env:
         USERNAME: ${{ secrets.USERNAME }}
         DEVICE_SEED: ${{ secrets.DEVICE_SEED }}
