@@ -1,13 +1,10 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: AutoCheck
+name: "AutoCheck"
 
 on:
   workflow_dispatch:
   
-  schedule:
-     - cron: 0 16 * * *
+  # schedule:
+  #    - cron: 0 16 * * *
 jobs:
   build:
 
@@ -15,10 +12,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+    - uses: actions/setup-python@v2
       with:
         python-version: 3.8
+
     - name: Install dependencies
       run: |
         pip3 install requests pycryptodome
