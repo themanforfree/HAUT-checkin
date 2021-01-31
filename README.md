@@ -15,7 +15,7 @@
 
 ## 使用方法  
 
-[点这里](https://github.com/themanforfree/HAUT-checkin-SCF/releases/download/v0.1.0/HAUT-checkin-SCF.zip)下载源代码文件到本地
+[点这里](https://github.com/themanforfree/HAUT-checkin/releases/download/v0.1.0/HAUT-checkin-SCF.zip)下载源代码文件到本地
 
 登陆[腾讯云函数控制台](https://console.cloud.tencent.com/scf/)
 
