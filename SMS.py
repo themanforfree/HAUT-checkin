@@ -1,10 +1,16 @@
-from campus import CampusCard,login_by_SMS
-import os 
-import sys
-username = os.environ.get('USERNAME')
-device_seed = os.environ.get('DEVICE_SEED')
-t = login_by_SMS(username,device_seed)
-if sys.argv[1] == 'send':
-    t.sendSMS()
-else:
-    t.authSMS(sys.argv[1])
+from campus import login_by_SMS
+
+# 此脚本用于验证虚拟设备
+# device_seed输入任意数字
+# 密码登陆时需传入相同的device seed
+
+print('username:', end="")
+username = input()
+print('device seed:', end="")
+device_seed = input()
+
+t = login_by_SMS(username, device_seed)
+t.sendSMS()
+
+print('SMS code:', end="")
+t.authSMS(input())

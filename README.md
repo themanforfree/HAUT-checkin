@@ -1,6 +1,8 @@
 # HAUT-checkin
-河南工业大学自动校外打卡，基于Github Actions免服务器运行
+河南工业大学自动校外打卡  
+由于github actions存在明显延迟，建议直接使用腾讯云函数
 
+## 特点
 - 多人打卡
 - 使用简单，仅需账号密码以及用于微信推送的uid
 - 自动获取上一次打卡信息用于打卡
@@ -9,93 +11,86 @@
 
 ## 更新日志
 
-2021.1.17 Github Action出现未知问题无法使用，请使用[腾讯云函数版本](https://github.com/themanforfree/HAUT-checkin-SCF)
-
-2021.1.10 添加手动运行按钮，重写使用方法，添加截图便于操作
-
-2021.1.9 基于[原校内打卡脚本](https://github.com/themanforfree/EzCheckInSchool-MultiUser)修改,第一版校外打卡脚本发布
-
+2021.1.31 解决完美校园新设备需要验证码问题，重构项目，放弃github actions
 
 ## 使用方法  
 
-首先，点击页面右上角的`Star`并`Fork`
+[点这里](https://github.com/themanforfree/HAUT-checkin-SCF/releases/download/v0.1.0/HAUT-checkin-SCF.zip)下载源代码文件到本地
 
-![](img/1.png)
+登陆[腾讯云函数控制台](https://console.cloud.tencent.com/scf/)
 
-完成后左上角处的用户ID会变成你账号的ID
+点击`函数服务`->`新建`创建云函数
 
-![](img/2.png)
+选择`自定义函数`
+
+`地域`可以随便选
+
+`运行环境`选择`python3.6`
+
+`提交方法`选择`本地上传zip包`
+
+点击`上传`选择刚刚下载的zip文件
+
+展开`高级配置`子菜单
+
+`执行超时时间`设置为`900`秒
 
 然后点击此链接获取二维码
 
 [QRcode](http://wxpusher.zjiecode.com/api/qrcode/1men6ZnAtqckyldYHDbYfOKSsqcxxhXtu6nXChdP9iybdir048fJ1VxU0W5Kwlgo.jpg)
 
-每个用户都需要扫描此二维码关注新消息服务公众号
+每个用户都需要扫描此二维码关注新消息服务公众号用于推送打卡状态
 
-然后依次点击`我的`->`我的UID`，获取每个用户的UID
+关注后在公众号内依次点击`我的`->`我的UID`，获取每个用户的UID
 
-![](img/3.jpg)
+在环境变量处按照以下格式填入打卡成员信息
 
-接下来你需要设置`Secert`添加打卡成员的信息，在你Fork的项目中按以下步骤操作
- 
-`Settings`->`Secert`->`New repository secert`
+device_seed 可填入任意数字
 
-![](img/4.png)
+建议不要让多个用户的device_seed相同
 
-在 Name 处填入`USERS`
-
-在 Value 处按以下格式填入数据
-
-每个打卡成员占一行，个数不限
-
-在最后一行输入end
+| key     | Value          | 
+| :------ | :--------------|
+| `user1` | `账号 密码 device_seed uid` | 
+| `user2` | `账号 密码 device_seed uid` | 
 
 
-|Name|Value|example|
-| :-----| :---- | :---- |
-|`USERS`|`账号 密码 uid`|`17538141234 xxxxxxxxx UID_abcdefgh`|
+展开`触发器配置`子菜单
 
-最后提交的信息如下
+`触发周期`选择`自定义触发周期`
 
-```
-17588888888 ********* UID_abcdefgh
-end
-```
+`cron表达式`填入`0 10 0 * * * *`
 
-如有多个成员，提交信息如下
+即为凌晨00:10打卡，第二位表示分钟，第三位表示小时
 
-```
-17588888888 ********* UID_abcdefgh
-......
-17588888888 ********* UID_ijklmnop
-end
-```
-![](img/5.png)
+可自行修改打卡时间
 
-然后按以下操作启用github actions
+点击`完成`
 
-`Fork的项目主页`->`Actions`->`I understand...` 开启Actions
+以上步骤完成后
 
-![](img/6.png)
+进入`函数代码`页面
 
-此时workflow可能默认为禁用状态，点击`AutoCheck`->`Enable workflow`启用
+点击左侧的`SMS.py`
 
-![](img/7.png)
+在点击右上角的`绿色小三角`运行此脚本
 
-至此脚本部署完成，在未到打卡时间时你可以手动运行脚本用于测试，在下图位置点击`run workflow`即可
+用于验证虚拟的新设备
 
-![](img/8.png)
+在命令行依次填入`username`和刚刚填入环境变量的`device_seed`
 
-**由于github actions存在明显延迟，默认设置于每日每日凌晨00:00打卡**
+然后输入收到的验证码
+
+至此所有步骤完成
+
+你可以点击页面下方的`测试`来验证是否出错
+
+部署完成后如需添加打卡成员，修改函数配置添加环境变量即可
+
+**部署成功后第一次使用时，请在打卡时间确认脚本运行正常，默认每日00:10开始打卡**
 
 **注意：本项目默认学校为河南工业大学，其他学校请自行修改代码。**
 
 
-
-## 友情链接
-
-https://github.com/themanforfree/EzCheckInSchool-MultiUser - 校内打卡
-
-https://github.com/zhongbr/wanmei_campus - 完美校园模拟登录
 
 

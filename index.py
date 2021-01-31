@@ -10,14 +10,7 @@ from campus import CampusCard
 error = []
 
 
-def main():
-
-    # 输入数据
-    stus = []
-    tmp = input()
-    while tmp != 'end':
-        stus.append(tmp.split(' '))
-        tmp = input()
+def main(stus):
 
     for stu in stus:
         phone = stu[0]
@@ -109,7 +102,6 @@ def get_last_post_json(token):
     return None
 
 
-# 从上次打卡的信息中获取对应的数据
 def get_updatainfo(updatainfos, propertyname):
     for a in updatainfos:
         if a['propertyname'] == propertyname:
@@ -284,10 +276,26 @@ def check(phone, password, device_seed, uid):
         error.append([phone, password, device_seed, uid])
     return msg
 
-
+# 腾讯云函数从此入口进入
 def main_handler(arg1, arg2):
-    main()
+    stus = []
+    i = 1
+    while True:
+        try:
+            user = os.environ.get('user' + str(i))
+            if user is None:
+                break
+            stus.append(user.split(' '))
+            i += 1
+        except:
+            break
+    main(stus)
 
-
+# 直接运行脚本从此入口进入
 if __name__ == "__main__":
-    main()
+    stus = []
+    tmp = input()
+    while tmp != 'end':
+        stus.append(tmp.split(' '))
+        tmp = input()
+    main(stus)

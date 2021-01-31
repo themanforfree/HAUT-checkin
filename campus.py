@@ -112,7 +112,7 @@ class CampusCard:
         :return:
         """
         resp = requests.post(
-            "https://server.17wanxiao.com/campus/cam_iface46/exchangeSecretkey.action",
+            "https://app.59wanmei.com/campus/cam_iface46/exchangeSecretkey.action",
             headers={
                 "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; HUAWEI INE-AL00 Build/HUAWEIINE-AL00)",
             },
@@ -159,7 +159,7 @@ class CampusCard:
             "data": object_encrypt(login_args, self.user_info["appKey"])
         }
         resp = requests.post(
-            "https://server.17wanxiao.com/campus/cam_iface46/loginnew.action",
+            "https://app.59wanmei.com/campus/cam_iface46/loginnew.action",
             headers={"campusSign": hashlib.sha256(
                 json.dumps(upload_args).encode('utf-8')).hexdigest()},
             json=upload_args,
@@ -211,7 +211,7 @@ class login_by_SMS:
         :return:
         """
         resp = requests.post(
-            "https://server.17wanxiao.com/campus/cam_iface46/exchangeSecretkey.action",
+            "https://app.59wanmei.com/campus/cam_iface46/exchangeSecretkey.action",
             headers={
                 "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; HUAWEI INE-AL00 Build/HUAWEIINE-AL00)",
             },
@@ -275,12 +275,15 @@ class login_by_SMS:
             json=upload_args,
             verify=False
         )
-        print(resp.text)
+        if json.loads(resp.text)['result_']:
+            print('SMS send success')
+        else:
+            print('error')
 
     def authSMS(self, sms):
         data = des_3_encrypt(json.dumps({
             'appCode': "M002",
-            'deviceId': "866859491137206",
+            'deviceId': self.user_info['deviceId'],
             'netWork': "wifi",
             'qudao': "guanwang",
             'requestMethod': "cam_iface46/registerUsersByTelAndLoginNew.action",
@@ -307,4 +310,7 @@ class login_by_SMS:
             json=upload_args,
             verify=False
         )
-        print(resp.text)
+        if json.loads(resp.text)['result_']:
+            print('login success')
+        else:
+            print('error')
