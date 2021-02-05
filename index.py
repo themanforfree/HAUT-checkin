@@ -28,7 +28,8 @@ def main(stus):
         for i in range(len(error)-1, -1, -1):
             phone = error[i][0]
             password = error[i][1]
-            uid = error[i][2]
+            device_seed = error[i][2]
+            uid = error[i][3]
 
             msg = check(phone, password, device_seed, uid)
             print(msg)
