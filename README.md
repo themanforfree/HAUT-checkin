@@ -51,8 +51,8 @@ device_seed 可填入任意数字
 
 | key     | Value          | 
 | :------ | :--------------|
-| `user1` | `账号 密码 device_seed uid` | 
-| `user2` | `账号 密码 device_seed uid` | 
+| `user1` | `账号` `密码` `device_seed uid` | 
+| `user2` | `账号` `密码` `device_seed uid` | 
 
 
 展开`触发器配置`子菜单
