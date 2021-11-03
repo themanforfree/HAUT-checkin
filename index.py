@@ -4,11 +4,13 @@ import time
 import re
 import random
 import os
+
 from campus import CampusCard
 
 # error数组用于保存打卡失败的成员循环打卡
 error = []
 
+# 尊敬的用户，你的UID是：UID_0c1fk4y577ERAXqF0auFgWlFE0at
 
 def main(stus):
 
@@ -76,14 +78,21 @@ def get_last_post_json(token):
     retry = 0
     while retry < 3:
         jsons = {"businessType": "epmpics",
-                 "jsonData": {"templateid": "pneumonia", "token": token},
-                 "method": "userComeApp"}
+                 "jsonData": {
+                     "templateid": "clockSign2",
+                     "customerAppTypeRuleId":147,
+                     "token":token},
+                 "method": "userComeAppSchool",
+                 "token":token
+                 }
         try:
             # 如果不请求一下这个地址，token就会失效
             requests.post(
                 "https://reportedh5.17wanxiao.com/api/clock/school/getUserInfo", data={'token': token})
             res = requests.post(
+                # url="https://reportedh5.17wanxiao.com/api/clock/school/rules", data={'token': token,"customerAppTypeId":180}).json()
                 url="https://reportedh5.17wanxiao.com/sass/api/epmpics", json=jsons, timeout=10).json()
+            
         except:
             retry += 1
             time.sleep(1)
@@ -91,6 +100,7 @@ def get_last_post_json(token):
         if res['code'] != '10000':
             return None
         data = json.loads(res['data'])
+
         post_dict = {
             'deptStr': data['deptStr'],
             'areaStr': data['areaStr'],
@@ -115,143 +125,53 @@ def check(phone, password, device_seed, uid):
     if not token:
         return '获取token失败'
     last_check_json = get_last_post_json(token)
+    # print(json.dumps(last_check_json['updatainfos']))
     if not last_check_json:
         return '获取上一次打卡信息失败'
     now = get_time()
     check_json = {
         "businessType": "epmpics",
-        "method": "submitUpInfo",
+        "method": "submitUpInfoSchool",
         "jsonData": {
             "deptStr": last_check_json['deptStr'],
             "areaStr": last_check_json['areaStr'],
             "reportdate": round(time.time() * 1000),
-            "customerid": "43",
+            "customerid": 43,
             "deptid": last_check_json['deptStr']['deptid'],
             "source": "app",
-            "templateid": "pneumonia",
+            "templateid": "clockSign2",
             "stuNo": last_check_json['stuNo'],
             "username": last_check_json['username'],
-            "phonenum": last_check_json['phonenum'],
             "userid": round(time.time()),
             "updatainfo": [
-                {
-                    "propertyname": "isGoWarningAdress",
-                    "value": get_updatainfo(last_check_json['updatainfos'], "isGoWarningAdress")
-                },
-                {
-                    "propertyname": "jtdz",
-                    "value": get_updatainfo(last_check_json['updatainfos'], "jtdz")
-                },
-                {
-                    "propertyname": "personNO",
-                    "value": get_updatainfo(last_check_json['updatainfos'], "personNO")
-                },
-                {
-                    "propertyname": "langtineadress",
-                    "value": get_updatainfo(last_check_json['updatainfos'], "langtineadress")
-                },
-                {
-                    "propertyname": "ownPhone",
-                    "value": get_updatainfo(last_check_json['updatainfos'], "ownPhone")
-                },
-                {
-                    "propertyname": "emergencyContact",
-                    "value": get_updatainfo(last_check_json['updatainfos'], "emergencyContact")
-                },
-                {
-                    "propertyname": "tradeNum",
-                    "value": get_updatainfo(last_check_json['updatainfos'], "tradeNum")
-                },
                 {
                     "propertyname": "temperature",
                     "value": get_updatainfo(last_check_json['updatainfos'], "temperature")
                 },
                 {
                     "propertyname": "symptom",
-                    "value": "均无"
+                    "value": get_updatainfo(last_check_json['updatainfos'], "symptom")
                 },
                 {
-                    "propertyname": "isContactpatient",
-                    "value": "均无"
+                    "propertyname":"isFFHasSymptom",
+                    "value": get_updatainfo(last_check_json['updatainfos'], "isFFHasSymptom")
                 },
                 {
-                    "propertyname": "istouchcb",
+                    "propertyname":"isContactFriendIn14",
                     "value": "否"
                 },
                 {
-                    "propertyname": "isTransitProvince",
+                    "propertyname":"xinqing",
                     "value": "否"
-                },
-                {
-                    "propertyname": "isTouch",
-                    "value": "否"
-                },
-                {
-                    "propertyname": "backadress",
-                    "value": ""
-                },
-                {
-                    "propertyname": "isContactFriendIn14",
-                    "value": "否"
-                },
-                {
-                    "propertyname": "sxaddress",
-                    "value": ""
-                },
-                {
-                    "propertyname": "medicalObservation",
-                    "value": "否"
-                },
-                {
-                    "propertyname": "sxss",
-                    "value": ""
-                },
-                {
-                    "propertyname": "isConfirmed",
-                    "value": "否"
-                },
-                {
-                    "propertyname": "assistRemark",
-                    "value": ""
-                },
-                {
-                    "propertyname": "gyfh",
-                    "value": "否"
-                },
-                {
-                    "propertyname": "FamilyIsolate",
-                    "value": ""},
-                {
-                    "propertyname": "ishborwh",
-                    "value": "否"
-                },
-                {
-                    "propertyname": "IsHospitaltxt",
-                    "value": ""
-                },
-                {
-                    "propertyname": "fhhb",
-                    "value": "否"
-                },
-                {
-                    "propertyname": "isname",
-                    "value": ""
-                },
-                {
-                    "propertyname": "other1",
-                    "value": ""
-                },
-                {
-                    "propertyname": "isFFHasSymptom",
-                    "value": "是"
                 }
             ],
-            "gpsType": 1,
+            "customerAppTypeRuleId": 147,
+            "clockState": 0,
             "token": token
         },
         "token": token
     }
-
+    # print(json.dumps(check_json))
     flag = 0
     for i in range(1, 2):
         print('{0}第{1}次尝试打卡中...'.format(last_check_json['username'], i))
